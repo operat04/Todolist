@@ -1,23 +1,99 @@
-import logo from './logo.svg';
+import React from 'react';
 import './App.css';
+import TodoList from './component/TodoList';
+import Header from './component/Header'
+import Input from './component/Input'
+import Template from './component/Template';
+import {useEffect , useState} from 'react'
+
 
 function App() {
+  const [inputToggle,setInputToggle] = useState(false)
+  const [todos , setTodos] = useState([]);
+
+  const onInputToggle = ()=>{
+    setInputToggle(!inputToggle)
+  }
+
+  useEffect(()=>{
+    fetch("http://localhost:3001/todos")
+    .then(data=>data.json())
+    .then(data=>{
+      setTodos(data)
+    })
+  },[])
+
+  const onInputTodo = (text) =>{
+    if(text===""){
+      return alert("할 일을 입력해주세요.")
+    }else{
+      fetch('http://localhost:3001/todos/', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              "text" : text,
+              "isComplete" : false 
+            })
+      })
+      .then(data=>data.json())
+      .then(data=>{
+        setTodos([...todos,data])
+      })
+    }
+  }
+
+  // const onCheckToggle = (id)=>{
+  //   setTodos(todos=>todos.map((todo)=> todo.id===id ? {...todo , isComplete : !todo.isComplete} : todo))
+  // }
+  const onCheckToggle = (id , text)=>{
+    fetch(`http://localhost:3001/todos/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        "text" : text,
+        "isComplete" : !todos.isComplete
+      })
+    })
+    .then(()=>{
+      window.location.reload();
+    })
+  }
+
+  const deleteTodos= (id)=>{
+    fetch(`http://localhost:3001/todos/${id}`,{
+      method : "DELETE",
+    })
+    .then(()=>{
+      window.location.reload();
+    })
+  }
+
+  const allDeletetodos = ()=>{
+    for(let i=1; i<=todos.length; i++){
+      fetch(`http://localhost:3001/todos/${i}`,{
+        method : "DELETE",
+      })
+    }
+    window.location.reload();
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Header todos={todos} />
+      <div className='button-container'>
+      <button onClick={onInputToggle} className='add-todo-button'>
+        할 일 추가하기
+      </button>
+      <button className='delete-all' onClick={allDeletetodos}>전체 비우기</button>
+      </div>
+      <Template >
+        <TodoList todos={todos} onCheckToggle={onCheckToggle} deleteTodos={deleteTodos} />
+        {inputToggle && <Input onInputToggle={onInputToggle} onInputTodo={onInputTodo} />}
+      </Template>
     </div>
   );
 }

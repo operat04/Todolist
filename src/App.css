@@ -1,38 +1,118 @@
-.App {
+.App{
   text-align: center;
 }
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.Template {
+  padding-top: 20px;
+  max-height: 100vh;
 }
+.title{
+  width: 90vw;
+  margin-left: auto;
+  margin-right: auto;
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+  padding-bottom: 20px;
+  font-size: 3rem;
+  font-weight: bold;
+  color: gray
 }
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.TodoList{
+  width: 90vw;
+  margin-left: auto;
+  margin-right: auto;
+  padding-bottom: 20pxs;
+}
+.TodoItem{
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 15px;
+  border-radius: 5px;
+  box-shadow: 1px 2px 5px 1px gray;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  width: 40%;
+}
+.content{
+  cursor: pointer;
+  display: flex;
+  flex: 1;
+  align-items: center;
+}
+.content.checked .text{
+  text-decoration: line-through;
+}
+.content svg{
+  font-size: 1.5rem;
+  color:gray;
+}
+.content .text{
+  margin-left: 0.5rem;
+  flex:1;
+}
+.button-container{
+  display: flex;
+  justify-content: space-between;
+  width: 35%;
+  margin-left: 32%;
+}
+.add-todo-button{
+  width: 200px;
+  z-index: 100;
+  cursor: pointer;
+  font-size: 2rem;
+  color: gray;
+}
+.delete-all{
+  font-size: 1rem;
+  color:gray;
+  cursor: pointer;
+}
+.background{
+  position:fixed;
+  z-index: 980;
+  top:0;
+  overflow: hidden;
+  width:100vw;
+  height: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background:gray ;
+  opacity: 0.8;
+}
+form{
+  margin-left: 35%;
+  width: 30%;
+  position:fixed;
+  top:40%;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  align-items: center;
+  z-index:990;
+  border-radius: 5px;
+  box-shadow: 1px 2px 5px 1px gray;
+  background-color: white;
 }
-
-.App-link {
-  color: #61dafb;
+form > input{
+  background: none;
+  outline: none;
+  border: none;
+  border-bottom: 1px solid gray;
+  padding : 0.5rem;
+  font-size: 1.125rem;
+  line-height: 1.5;
 }
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+form > button{
+  margin-top: 20px;
+  background-color: none;
+  outline: none;
+  border : none;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: 0.1s background ease-in;
 }
