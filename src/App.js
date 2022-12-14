@@ -8,10 +8,14 @@ import {useEffect , useState} from 'react'
 
 
 function App() {
+  const [seletedText,setSelecteText] = useState(null)
   const [inputToggle,setInputToggle] = useState(false)
   const [todos , setTodos] = useState([]);
 
   const onInputToggle = ()=>{
+    if(seletedText){
+      setSelecteText(null)
+    }
     setInputToggle(!inputToggle)
   }
 
@@ -47,15 +51,30 @@ function App() {
   // const onCheckToggle = (id)=>{
   //   setTodos(todos=>todos.map((todo)=> todo.id===id ? {...todo , isComplete : !todo.isComplete} : todo))
   // }
-  const onCheckToggle = (id , text)=>{
+  const onCheckToggle = (id , text , isComplete)=>{
     fetch(`http://localhost:3001/todos/${id}`, {
-      method: 'PUT',
+      method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         "text" : text,
-        "isComplete" : !todos.isComplete
+        "isComplete" : !isComplete
+      })
+    })
+    .then(()=>{
+      window.location.reload();
+    })
+  }
+
+  const onUpdate = (id,text)=>{
+    fetch(`http://localhost:3001/todos/${id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        "text" : text
       })
     })
     .then(()=>{
@@ -81,6 +100,10 @@ function App() {
     window.location.reload();
   }
 
+  const onChangeselectedText = (todo)=>{
+    setSelecteText(todo)
+  }
+
   return (
     <div className="App">
       <Header todos={todos} />
@@ -91,8 +114,14 @@ function App() {
       <button className='delete-all' onClick={allDeletetodos}>전체 비우기</button>
       </div>
       <Template >
-        <TodoList todos={todos} onCheckToggle={onCheckToggle} deleteTodos={deleteTodos} />
-        {inputToggle && <Input onInputToggle={onInputToggle} onInputTodo={onInputTodo} />}
+        <TodoList 
+        todos={todos} 
+        onCheckToggle={onCheckToggle} 
+        deleteTodos={deleteTodos} 
+        onInputToggle={onInputToggle}
+        onChangeselectedText={onChangeselectedText}
+        />
+        {inputToggle && <Input onInputToggle={onInputToggle} onInputTodo={onInputTodo} seletedText={seletedText} onUpdate={onUpdate} />}
       </Template>
     </div>
   );
